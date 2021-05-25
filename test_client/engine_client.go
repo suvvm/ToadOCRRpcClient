@@ -2,8 +2,8 @@ package test_client
 
 import (
 	"log"
-	"suvvm.work/ToadOCRRpcClient/rpc"
-	"suvvm.work/ToadOCRRpcClient/utils"
+	"github.com/suvvm/ToadOCRRpcClient/rpc"
+	"github.com/suvvm/ToadOCRRpcClient/utils"
 )
 
 func RunTestEngineClient(appID, appSecret, discoverUrl string) error {

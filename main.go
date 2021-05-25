@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 	"os"
-	"suvvm.work/ToadOCRRpcClient/common"
-	"suvvm.work/ToadOCRRpcClient/test_client"
+	"github.com/suvvm/ToadOCRRpcClient/common"
+	"github.com/suvvm/ToadOCRRpcClient/test_client"
 )
 
 func main() {

@@ -8,8 +8,8 @@ import (
 	"google.golang.org/grpc/balancer/roundrobin"
 	"google.golang.org/grpc/resolver"
 	"log"
-	pb_engine "suvvm.work/ToadOCRRpcClient/rpc/toad_ocr_engine/idl"
-	"suvvm.work/ToadOCRRpcClient/utils"
+	pb_engine "github.com/suvvm/ToadOCRRpcClient/rpc/toad_ocr_engine/idl"
+	"github.com/suvvm/ToadOCRRpcClient/utils"
 	"time"
 )
 

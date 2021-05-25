@@ -1,4 +1,4 @@
-module suvvm.work/ToadOCRRpcClient
+module github.com/suvvm/ToadOCRRpcClient
 
 go 1.15
 

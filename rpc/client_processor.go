@@ -9,8 +9,8 @@ import (
 	"google.golang.org/grpc/resolver"
 	"log"
 	"strconv"
-	pb_processor "suvvm.work/ToadOCRRpcClient/rpc/toad_ocr_preprocessor/idl"
-	"suvvm.work/ToadOCRRpcClient/utils"
+	pb_processor "github.com/suvvm/ToadOCRRpcClient/rpc/toad_ocr_preprocessor/idl"
+	"github.com/suvvm/ToadOCRRpcClient/utils"
 	"time"
 )
 

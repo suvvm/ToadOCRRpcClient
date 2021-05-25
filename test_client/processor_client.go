@@ -3,7 +3,7 @@ package test_client
 import (
 	"io/ioutil"
 	"log"
-	"suvvm.work/ToadOCRRpcClient/rpc"
+	"github.com/suvvm/ToadOCRRpcClient/rpc"
 )
 
 func RunTestProcessorClient (appID, appSecret, discoverUrl string) error {
