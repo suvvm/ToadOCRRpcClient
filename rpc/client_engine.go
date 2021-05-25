@@ -20,21 +20,27 @@ type EngineClient struct {
 	toadOCREngineClient pb_engine.ToadOcrClient
 }
 
-func (engine *EngineClient) InitEngineClient(appID, appSecret, discoverUrl string) error {
-	flag.Parse()
-	var url string
-	url = discoverUrl
-	if discoverUrl == ""{
-		log.Printf("discoverUrl is empty using default at http://localhost:2379")
-		url = *defaultDiscoverUrl
+func NewEngineClient(appID, appSecret, discoverUrl string) *EngineClient {
+	return &EngineClient{
+		AppID: appID,
+		AppSecret: appSecret,
+		DiscoverUrl: discoverUrl,
 	}
-	if appID == "" || appSecret == "" {
+}
+
+func (engine *EngineClient) InitEngineClient() error {
+	flag.Parse()
+	if engine.DiscoverUrl == ""{
+		log.Printf("discoverUrl is empty using default at http://localhost:2379")
+		engine.DiscoverUrl = *defaultDiscoverUrl
+	}
+	if engine.AppID == "" || engine.AppSecret == "" {
 		return fmt.Errorf("appID or appSecret is empty")
 	}
-	r := NewResolver(url, *engineServ)
+	r := NewResolver(engine.DiscoverUrl, *engineServ)
 	resolver.Register(r)
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	conn, err := grpc.DialContext(ctx, r.Scheme()+"://authority/"+url,
+	conn, err := grpc.DialContext(ctx, r.Scheme()+"://authority/"+engine.DiscoverUrl,
 		grpc.WithInsecure(), grpc.WithBalancerName(roundrobin.Name), grpc.WithBlock())
 	if err != nil {
 		return err
@@ -54,6 +60,7 @@ func (engine *EngineClient) Predict(netFlag string, image []byte) (string, error
 		return "", err
 	}
 	req.BasicToken = token
+	log.Printf("basicToken:%v", token)
 	resp, err := engine.toadOCREngineClient.Predict(context.Background(), req)
 	if err != nil {
 		return "", err

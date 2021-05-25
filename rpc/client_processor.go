@@ -21,21 +21,27 @@ type ProcessorClient struct {
 	toadOCRPreprocessorClient pb_processor.ToadOcrPreprocessorClient
 }
 
-func (processor *ProcessorClient) InitProcessorClient(appID, appSecret, discoverUrl string) error {
-	flag.Parse()
-	var url string
-	url = discoverUrl
-	if discoverUrl == ""{
-		log.Printf("discoverUrl is empty using default at http://localhost:2379")
-		url = *defaultDiscoverUrl
+func NewProcessorClient(appID, appSecret, discoverUrl string) *ProcessorClient {
+	return &ProcessorClient{
+		AppID: appID,
+		AppSecret: appSecret,
+		DiscoverUrl: discoverUrl,
 	}
-	if appID == "" || appSecret == "" {
+}
+
+func (processor *ProcessorClient) InitProcessorClient() error {
+	flag.Parse()
+	if processor.DiscoverUrl == ""{
+		log.Printf("discoverUrl is empty using default at http://localhost:2379")
+		processor.DiscoverUrl = *defaultDiscoverUrl
+	}
+	if processor.AppID == "" || processor.AppSecret == "" {
 		return fmt.Errorf("appID or appSecret is empty")
 	}
-	r := NewResolver(url, *engineServ)
+	r := NewResolver(processor.DiscoverUrl, *processorServ)
 	resolver.Register(r)
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	conn, err := grpc.DialContext(ctx, r.Scheme()+"://authority/"+url,
+	conn, err := grpc.DialContext(ctx, r.Scheme()+"://authority/"+processor.DiscoverUrl,
 		grpc.WithInsecure(), grpc.WithBalancerName(roundrobin.Name), grpc.WithBlock())
 	if err != nil {
 		return err
@@ -44,9 +50,9 @@ func (processor *ProcessorClient) InitProcessorClient(appID, appSecret, discover
 	return nil
 }
 
-func (processor *ProcessorClient) Process(netFlag, appID string, image []byte) ([]string, error) {
+func (processor *ProcessorClient) Process(netFlag string, image []byte) ([]string, error) {
 	req := &pb_processor.ProcessRequest{
-		AppId: appID,
+		AppId: processor.AppID,
 		NetFlag: netFlag,
 		Image: image,
 	}
